@@ -48,28 +48,16 @@ namespace bblProgII{
     // devuelve la posición donde debería estar según el orden de la
     // lista.
  	// EDIT: --------------- BUSQUEDA POR ORDEN LEXICOFRAFICO CRECIENTE-------
-	// Devuelve: (0,100] si NO existe, [1001,1100] si existe
-    unsigned UsuarioTwitter::buscar_usuario(const Usuarios &usuarios, const std::string &user) const{
+    unsigned UsuarioTwitter::buscar_usuario(const Usuarios &usuarios, const std::string &usuario) const{
 
-        unsigned pos;
         unsigned i = 0;
 
-        while (user < usuarios.listado[i] && i < usuarios.num_usuarios){
-
-        	if (user != ""){		// Usuario encontrado (se comprueba en la siguiente ronda del bucle)
-
-        		pos = i + 1002;       //Posicion como num_usuario
-
-        	} else {
-
-        		// No existe usuario, devuelve posicion de donde deberia ir
-        		pos = i + 1;
-        	}
+        while (i < usuarios.num_usuarios && usuario < usuarios.listado[i]){
 
         	i ++;
         }
 
-        return pos;     // Devuelve posicion en num_usuarios (1, 2, 3...), no en usuarios.listado (0, 1, 2...)
+        return i;
     }
 
     // Inserta un usuario en la lista en la posición indicada
@@ -78,21 +66,12 @@ namespace bblProgII{
     // EDIT: ------------------- MOVER AL RESTO DE USUARIOS ----------------
     void UsuarioTwitter::insertar_usuario_pos(Usuarios &usuarios, unsigned pos, const std::string &usuario){
 
-        //pos en orden de registro
-        pos --;     // Si pos = 5 --> pos = 4
+    	for (unsigned i = usuarios.num_usuarios;i > pos; i --){
 
-        // Si hay un usuario en su sitio, lo movemos a el y a los que hay despues
-        if (pos <= usuarios.num_usuarios){      
-
-        	for (unsigned i = 0; i < (usuarios.num_usuarios - pos); i ++){
-
-        		// Movemos al ultimo usuario una posicion a la derecha del array
-        		usuarios.listado[usuarios.num_usuarios - i] = usuarios.listado[usuarios.num_usuarios - i - 1];
-        	}
-        }
-
-       	//Insertamos el usuario
-        usuarios.listado[pos] = usuario;		        
+    		usuarios.listado[i] = usuarios.listado[i - 1];
+		}		        
+    
+		usuarios.listado[pos] = usuario;
     }
 
     // Elimina un usuario de una posición y, si es necesario, 
@@ -101,20 +80,10 @@ namespace bblProgII{
     // EDIT: ------------------- MOVER AL RESO DE USUARIOS ----------------------
     void UsuarioTwitter::eliminar_usuario_pos(Usuarios &usuarios, unsigned pos){
 
-    	//pos en orden de registro
-    	pos --; 		// Si pos = 5 --> pos = 4;
+    	for (unsigned i = pos; i < usuarios.num_usuarios; i++){
 
-   		//Eliminamos usuario
-   		usuarios.listado[pos] = "";
-
-   		//Cerramos el hueco
-   		if (pos < usuarios.num_usuarios){
-
-   		   for (unsigned i = 0; i < (usuarios.num_usuarios - pos); i++){
-
-   		       usuarios.listado[pos + i] = usuarios.listado[pos + i + 1];
-   		   }
-        }
+    		usuarios.listado[i] = usuarios.listado[i + 1];
+    	}
    	}
 
 
@@ -125,102 +94,36 @@ namespace bblProgII{
 
 
     // Constructor por defecto
-    // Inicializar todos los datos vacíos.                  // ¿¿¿¿¿¿¿¿¿¿¿¿ ESTA BIEN ???????????
-    UsuarioTwitter::UsuarioTwitter(){
+    // Inicializar todos los datos vacíos.
+    UsuarioTwitter::UsuarioTwitter(): id_usuario(""), tweets.num_tweets(0),
+    siguiendo.num_usuarios(0), seguidores.num_usuarios(0)
+    {
 
-        // ID usuario
-        id_usuario = "";
-        
-        // Tweets
-
-        tweets.num_tweets = 0;
-        for (unsigned i = 0; i < MAX_TWEETS; i++){
-
-            tweets.listado[i].tweet = "";
-
-            tweets.listado[i].fecha_hora.anyo = 0;
-            tweets.listado[i].fecha_hora.mes = 0;
-            tweets.listado[i].fecha_hora.dia = 0;
-            tweets.listado[i].fecha_hora.hora = 0,
-            tweets.listado[i].fecha_hora.minuto = 0;
-            tweets.listado[i].fecha_hora.segundo = 0;
-        }
-
-        // Lista de siguiendo y seguidores
-
-        siguiendo.num_usuarios = 0;
-        seguidores.num_usuarios = 0;
-
-        for (unsigned i = 0; i < MAX_USUARIOS; i++){
-
-            siguiendo.listado[i] = "";
-            seguidores.listado[i] = "";
-        }
     }                              
 
     // Constructor extendido.
     // Inicializa el idenfificador de usuario con el 'id' que se pasa
     // como parámetro. Las listas de usuarios y tweets están
     // vacías.
-    UsuarioTwitter::UsuarioTwitter(const std::string &id){
-
-        // ID usuario
-        id_usuario = id;
-        
-        // Tweets
-        tweets.num_tweets = 0;
-        for (unsigned i = 0; i < MAX_TWEETS; i++){
-
-            tweets.listado[i].tweet = "";
-
-            tweets.listado[i].fecha_hora.anyo = 0;
-            tweets.listado[i].fecha_hora.mes = 0;
-            tweets.listado[i].fecha_hora.dia = 0;
-            tweets.listado[i].fecha_hora.hora = 0,
-            tweets.listado[i].fecha_hora.minuto = 0;
-            tweets.listado[i].fecha_hora.segundo = 0;
-        }
-
-        // Lista de siguiendo y seguidores
-
-        seguidores.num_usuarios = 0;
-        siguiendo.num_usuarios = 0;
-
-        for (unsigned i = 0; i < MAX_USUARIOS; i++){
-
-            siguiendo.listado[i] = "";
-            seguidores.listado[i] = "";
-        }
+    UsuarioTwitter::UsuarioTwitter(const std::string &id): id_usuario(id), 
+    tweets.num_tweets(0), seguidores.num_usuarios(0), siguiendo.num_usuarios(0)
+    {
 
     }
 
     // Constructor de copia
-    UsuarioTwitter::UsuarioTwitter(const UsuarioTwitter &otro_usuario){     // Esta bien? (Otros lados, aparece al reves)
+    UsuarioTwitter::UsuarioTwitter(const UsuarioTwitter &otro_usuario){
 
-        // Copia de ID usuario
-        id_usuario = otro_usuario.id_usuario;
-        
-        // Copia de tweets
-        for (unsigned i = 0; i < otro_usuario.tweets.num_tweets; i++){
+    	// id_usuario
+        usuario.id_usuario = otro_usuario.id_usuario;
+    
+        // Seguidores y siguiendo
+        usuario.seguidores = otro_usuario.seguidores;
+        usuario.siguiendo = otro_usuario.siguiendo;
 
-            tweets.listado[i].tweet = otro_usuario.tweets.listado[i].tweet;
+        //Tweets
+        usuario.tweets = otro_usuario.tweets;
 
-            tweets.listado[i].fecha_hora.anyo = otro_usuario.tweets.listado[i].fecha_hora.anyo;
-            tweets.listado[i].fecha_hora.mes = otro_usuario.tweets.listado[i].fecha_hora.mes;
-            tweets.listado[i].fecha_hora.dia = otro_usuario.tweets.listado[i].fecha_hora.dia;
-            tweets.listado[i].fecha_hora.hora = otro_usuario.tweets.listado[i].fecha_hora.hora;
-            tweets.listado[i].fecha_hora.minuto = otro_usuario.tweets.listado[i].fecha_hora.minuto;
-            tweets.listado[i].fecha_hora.segundo = otro_usuario.tweets.listado[i].fecha_hora.segundo;
-        }
-
-        tweets.num_tweets = otro_usuario.tweets.num_tweets;
-
-        // Copia de listas siguiendo y seguidores
-        for (unsigned i = 0; i < otro_usuario.siguiendo.num_usuarios || i < otro_usuario.seguidores.num_usuarios; i++){
-
-            siguiendo.listado[i] = otro_usuario.siguiendo.listado[i];
-            seguidores.listado[i] = otro_usuario.seguidores.listado[i];
-        }
     }
 
     /* 
@@ -229,35 +132,9 @@ namespace bblProgII{
     */
 
     // Destructor de la clase
-    UsuarioTwitter::~UsuarioTwitter(){
+    UsuarioTwitter::~UsuarioTwitter()
+    {
 
-        // ID usuario
-        id_usuario = "";
-        
-        // Tweets
-        for (unsigned i = 0; i < tweets.num_tweets; i++){
-
-            tweets.listado[i].tweet = "";
-
-            tweets.listado[i].fecha_hora.anyo = 0;
-            tweets.listado[i].fecha_hora.mes = 0;
-            tweets.listado[i].fecha_hora.dia = 0;
-            tweets.listado[i].fecha_hora.hora = 0,
-            tweets.listado[i].fecha_hora.minuto = 0;
-            tweets.listado[i].fecha_hora.segundo = 0;
-        }
-
-        tweets.num_tweets = 0;
-
-        // Lista de siguiendo y seguidores
-        for (unsigned i = 0; i < siguiendo.num_usuarios || i < seguidores.num_usuarios; i++){
-
-            siguiendo.listado[i] = "";
-            seguidores.listado[i] = "";
-        }
-
-        siguiendo.num_usuarios = 0;
-        seguidores.num_usuarios = 0;
     }
 
     //------------------------------------------------------------------

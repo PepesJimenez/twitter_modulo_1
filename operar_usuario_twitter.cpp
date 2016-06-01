@@ -310,7 +310,7 @@ int main() {
 
         //Ficheros:
         string f_seg = "ada_lovelace.seg";
-        string f_sig = "ada.lovelace.sig";
+        string f_sig = "ada_lovelace.sig";
         string f_twt = "ada_lovelace.twt";
 
         //Funciones 

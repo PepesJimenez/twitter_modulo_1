@@ -1,0 +1,1 @@
+g++ -c -o usuario_twitter.o usuario_twitter.cpp -Wall -Werror -Wextra -ansi -std=c++11 && g++ -c -o operar_usuario_twitter.o operar_usuario_twitter.cpp -Wall -Werror -Wextra -ansi -std=c++11 && g++ -o operar_usuario_twitter operar_usuario_twitter.o usuario_twitter.o -Wall -Werror -Wextra -ansi -std=c++11
