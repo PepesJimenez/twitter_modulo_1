@@ -5,16 +5,14 @@
  * social 'Twitter', permitiendo la gestión de la lista de tweets,
  * usuarios seguidos (following) y usuarios seguidores (followers).
  *
- * Autor: Jose A. Jimenez
+ * Autor:
  * Fecha: Mon Mar 14 10:18:44 2016
  ****************************************************************************/
 
 #ifndef __USUARIO__TWITTER__
 #define __USUARIO__TWITTER__
 #include <string>
-#include <tr1/array>
-
-using namespace std::tr1;
+#include <array>
 
 namespace {
     const unsigned MAX_USUARIOS = 100; // Máximo número de seguidores o siguiendo
@@ -27,7 +25,7 @@ namespace bblProgII {
 // TIPOS PÚBLICOS
 //
 // Lista de usuarios
-typedef array <std::string, MAX_USUARIOS> ListaUsuarios;
+typedef std::array <std::string, MAX_USUARIOS> ListaUsuarios;
 struct Usuarios {
     unsigned num_usuarios;
     ListaUsuarios listado;
@@ -41,7 +39,7 @@ struct Tweet {
     std::string tweet;
     FechaHora fecha_hora;
 };
-typedef array <Tweet, MAX_TWEETS> ListaTweets;
+typedef std::array <Tweet, MAX_TWEETS> ListaTweets;
 struct Tweets {
     unsigned num_tweets;
     ListaTweets listado;
@@ -63,7 +61,6 @@ enum Resultado {
 
 class UsuarioTwitter {
 public:
-    
     // Constructor por defecto
     // Inicializar todos los datos vacíos.
     UsuarioTwitter();
@@ -135,10 +132,10 @@ public:
     void guardar_seguidores(const std::string &nom_fic, Resultado &res) const;
 
     // Guarda en fichero la lista de usuarios a los que sigue
-    void guardar_siguiendo(const std::string &nom_fic, Resultado &res) const;
+    void guardar_seguiendo(const std::string &nom_fic, Resultado &res) const;
 
     // Guarda en fichero los tweets del usuario
-    void guardar_tweets(const std::string &nom_fic, Resultado &res) const;
+    void guardar_tweets(const std::string &nom_fic, Resultado &Res) const;
 
     // Guarda en fichero las listas de usuarios  y tweets
     void guardar_todo(const std::string &nom_fic_seguidores,
@@ -203,7 +200,7 @@ public:
     // 'OK' a través de 'res'. En caso contrario, se devuelve
     // 'FIC_ERROR' o 'LISTA_LLENA', respectivamente (aunque se insertan
     // solo los usuarios que caben en la lista).
-    void cargar_siguiendo(const std::string &nom_fic, Resultado &res);
+    void cargar_seguiendo(const std::string &nom_fic, Resultado &res);
 
     // Carga desde fichero la lista de tweets del usuario,
     // eliminando los tweets actuales. Si el fichero se ha leído
@@ -231,7 +228,7 @@ private:
     // ATRIBUTOS: A DEFINIR POR EL ALUMNO
     //
     // Identificador del usuario
-    std::string id_usuario;
+    string id_usuario;
     // Lista de tweets
     Tweets tweets;
     // Lista de usuarios a los que se estoy siguiendo
@@ -247,8 +244,6 @@ private:
     // encuentra, devuelve la posición de la lista donde está. Si no,
     // devuelve la posición donde debería estar según el orden de la
     // lista.
-    // EDIT: --------------- BUSQUEDA POR ORDEN LEXICOFRAFICO CRECIENTE-------
-    // Devuelve: (0,100] si NO existe, [1001,1100] si existe
     unsigned buscar_usuario(const Usuarios &usuarios, const std::string &user) const;
 
     // Inserta un usuario en la lista en la posición indicada
