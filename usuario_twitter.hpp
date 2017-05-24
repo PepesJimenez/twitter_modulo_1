@@ -29,23 +29,23 @@ typedef std::array <std::string, MAX_USUARIOS> ListaUsuarios;
 struct Usuarios {
     unsigned num_usuarios;
     ListaUsuarios listado;
-};
+}; // struct Usuarios
 //---------------------------------------------------------------------------
 // Lista de tweets
 struct FechaHora {
-    unsigned anyo, mes, dia, hora, minuto, segundo;
-};
+    unsigned  dia, mes, anyo, hora, minuto, segundo;
+}; // struct FechaHora
 struct Tweet {
     std::string tweet;
     FechaHora fecha_hora;
-};
+}; // struct Tweet
 typedef std::array <Tweet, MAX_TWEETS> ListaTweets;
 struct Tweets {
     unsigned num_tweets;
     ListaTweets listado;
-};
+}; // struct Tweets
 //---------------------------------------------------------------------------
-// Resulstado de las operaciones:
+// Resultado de las operaciones:
 //  - OK: la operación se ha realizado con éxito
 //  - LISTA_LLENA: la operación no ha sido posible: lista llena
 //  - YA_EXISTE: la operación no ha sido posible: el elemento ya existe
@@ -57,10 +57,11 @@ enum Resultado {
     YA_EXISTE,
     NO_EXISTE,
     FIC_ERROR
-};
+}; // enum Resultado
 
 class UsuarioTwitter {
 public:
+
     // Constructor por defecto
     // Inicializar todos los datos vacíos.
     UsuarioTwitter();
@@ -79,6 +80,7 @@ public:
 
     // Destructor de la clase
     ~UsuarioTwitter();
+
 
     //------------------------------------------------------------------
     // MÉTODOS DE CONSULTA
@@ -132,7 +134,7 @@ public:
     void guardar_seguidores(const std::string &nom_fic, Resultado &res) const;
 
     // Guarda en fichero la lista de usuarios a los que sigue
-    void guardar_seguiendo(const std::string &nom_fic, Resultado &res) const;
+    void guardar_siguiendo(const std::string &nom_fic, Resultado &res) const;
 
     // Guarda en fichero los tweets del usuario
     void guardar_tweets(const std::string &nom_fic, Resultado &Res) const;
@@ -144,6 +146,7 @@ public:
                       Resultado &res_seguidores,
                       Resultado &res_siguiendo,
                       Resultado &res_tweets) const;
+
 
     //------------------------------------------------------------------
     // MÉTODOS DE ACTUALIZACIÓN
@@ -200,7 +203,7 @@ public:
     // 'OK' a través de 'res'. En caso contrario, se devuelve
     // 'FIC_ERROR' o 'LISTA_LLENA', respectivamente (aunque se insertan
     // solo los usuarios que caben en la lista).
-    void cargar_seguiendo(const std::string &nom_fic, Resultado &res);
+    void cargar_siguiendo(const std::string &nom_fic, Resultado &res);
 
     // Carga desde fichero la lista de tweets del usuario,
     // eliminando los tweets actuales. Si el fichero se ha leído
@@ -209,7 +212,6 @@ public:
     // 'FIC_ERROR' o 'LISTA_LLENA', respectivamente (aunque se insertan
     // solo los tweets que caben en la lista).
     void cargar_tweets(const std::string &nom_fic, Resultado &res);
-
 
     // Carga desde fichero las listas de usuarios y tweets. Si cada fichero se ha leído
     // correctamente y los usuarios/tweets caben en la lista correspondiente, se devuelve
@@ -223,12 +225,15 @@ public:
                      Resultado & res_siguiendo,
                      Resultado & res_tweets);
 
+
+
 private:
+
     //------------------------------------------------------------------
     // ATRIBUTOS: A DEFINIR POR EL ALUMNO
     //
     // Identificador del usuario
-    string id_usuario;
+    std::string id_usuario;
     // Lista de tweets
     Tweets tweets;
     // Lista de usuarios a los que se estoy siguiendo
@@ -254,6 +259,6 @@ private:
     // Elimina un usuario de una posisición
     // PRECONDICIÓN: la posición es correcta
     void eliminar_usuario_pos(Usuarios &usuarios, unsigned pos);
-};
-}
+}; // class UsuarioTwitter
+} // namespace bblProgII
 #endif
